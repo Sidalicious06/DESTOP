@@ -1,0 +1,22 @@
+<RCC>
+  <qresource>
+    <file>icons/About.png</file>
+    <file>icons/AboutClick.png</file>
+    <file>icons/ControlPanel.png</file>
+    <file>icons/ControlPanelClick.png</file>
+    <file>icons/Dashboard.png</file>
+    <file>icons/DashboardClick.png</file>
+    <file>icons/Exit.png</file>
+    <file>icons/ExitClick.png</file>
+    <file>icons/Icon.png</file>
+    <file>icons/Logo.png</file>
+    <file>icons/Menu.png</file>
+    <file>icons/Modulation.png</file>
+    <file>icons/ModulationClick.png</file>
+    <file>icons/Off.png</file>
+    <file>icons/On.png</file>
+    <file>icons/Settings.png</file>
+    <file>icons/SettingsClick.png</file>
+    <file>icons/Stall.png</file>
+  </qresource>
+</RCC>
