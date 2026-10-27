@@ -36,6 +36,8 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("DESTOP")
 
+        self.refresh_camera_list()
+
 
 
         # Start on Control Panel
@@ -59,7 +61,7 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
 
 
 
-        self.detector.start()
+        
 
 
         self.graph_figure = Figure(figsize=(6, 4))
@@ -94,8 +96,9 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
         self.fluctuation_timer.timeout.connect(self.trigger_next_fluctuation)
 
         self.fluctuation_interval_ms = 5000  
-        self.fluctuation_intensity = 38
+        self.fluctuation_intensity = 40
 
+        self.CameraConfirm.pressed.connect(self.engageBlink)
         
 
     # Subprocess Reading
@@ -161,6 +164,31 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
         self.close()
 
 
+    def engageBlink(self):
+
+        camera_index = self.CamerasComboBox.currentData()
+
+        self.detector.start(
+            sys.executable,
+            [
+                "-u",
+                "blink.py",
+                "--camera",
+                str(camera_index)
+            ]
+        )
+
+        
+        self.CameraConfirm.setDisabled(True)
+        self.CameraConfirm.hide()
+        self.CamerasComboBox.setDisabled(True)
+        self.CamerasComboBox.hide()
+        self.label_3.setDisabled(True)
+        self.label_3.hide()
+
+        
+
+
     def read_detector_output(self):
 
        
@@ -207,7 +235,7 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
                     duration = 600
                 time = msg[4]
                 
-                if complete_score > .37:
+                if complete_score > .33:
                     print("complete")
                     state = "complete"
                     completeBlinkCount += 1
@@ -256,14 +284,14 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
                 if recent_frequency < baseline_blink_frequency - 3:
                     print("Intensifying...")
 
-                    self.fluctuation_interval_ms -= 500
-                    self.fluctuation_intensity += 8
+                    self.fluctuation_interval_ms -= 100
+                    self.fluctuation_intensity += 3
 
                 elif recent_frequency > baseline_blink_frequency + 3:
                     print("Relaxing...")
 
-                    self.fluctuation_interval_ms += 500
-                    self.fluctuation_intensity -= 8
+                    self.fluctuation_interval_ms += 50
+                    self.fluctuation_intensity -= 2
 
                 else:
                     print("Nominal! Don't change anything :)")
@@ -280,7 +308,11 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
         if not self.oculomotor_running:
             return
 
-        
+        if self.fluctuation_interval_ms < 3800:
+            self.fluctuation_interval_ms = 3900
+        if self.fluctuation_interval_ms > 6000:
+            self.fluctuation_interval_ms = 6000
+
         self.fluctuation_timer.start(
             self.fluctuation_interval_ms
         )
@@ -396,3 +428,22 @@ class DESTOPControl(QMainWindow, Ui_MainWindow):
         print(f"Detector exited: code={exit_code}")
 
 
+    def refresh_camera_list(self):
+        self.CamerasComboBox.clear()
+
+        for camera_index in range(6):
+            cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+
+            if cap.isOpened():
+                success, frame = cap.read()
+
+                if success and frame is not None:
+                    self.CamerasComboBox.addItem(
+                        f"Camera {camera_index + 1}",
+                        camera_index
+                    )
+
+            cap.release()
+
+        if self.CamerasComboBox.count() == 0:
+            self.CamerasComboBox.addItem("No cameras detected", -1)

@@ -7,6 +7,8 @@ import sys
 import threading
 from datetime import datetime
 
+camera_index = 0
+
 def listen_for_commands():
     global current_phase, running, phase_active, current_participant
 
@@ -36,6 +38,17 @@ def listen_for_commands():
             print("ACK_EXIT", flush=True)
             break
 
+  
+
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--camera", type=int, default=0)
+args = parser.parse_args()
+
+camera_index = args.camera
+
+print(camera_index)
 
 
 import cv2
@@ -344,9 +357,8 @@ frame_lock = threading.Lock()
 
 
 # ---- Blink detection constants ----
-Z_BLINK_THRESHOLD = -3.0       # PR z-score threshold for complete blink
-Z_INCOMPLETE_THRESHOLD = -2.0  # PR z-score threshold for incomplete blink
-BLEND_BLINK_THRESHOLD = 0.6    # Blendshape value threshold
+
+
 ANGLE_THRESHOLD = 50
 
 EYE_CONSEC_FRAMES = 3  # Frames the blink must persist to count
@@ -555,7 +567,7 @@ def result_callback(result, output_image, timestamp_ms):
 
     # ONLY UPDATE BASELINE IF BLINK IS NOT LIKELY
     
-    if blink_score < 0.1:
+    if blink_score < 0.2:
         left_PR_baseline = left_PR_ema.update(leftPR)
         right_PR_baseline = right_PR_ema.update(rightPR)
 
@@ -583,7 +595,7 @@ def result_callback(result, output_image, timestamp_ms):
      #   print("ignore, pose skew")
 
 
-    both_closed = blink_score > .37
+    both_closed = blink_score > .3
     both_incomplete = incomplete_score > .25 and both_closed == False and blink_score > .275
 
     if blink_score > complete_blink_max:
@@ -593,7 +605,7 @@ def result_callback(result, output_image, timestamp_ms):
         incomplete_blink_max = incomplete_score
 
     
-    if elapsedTime > nextTime:
+    if elapsedTime > nextTime + 5:
         print("EVALUATE", elapsedTime)
         nextTime += evaluation_interval
 
@@ -683,7 +695,7 @@ detector = vision.FaceLandmarker.create_from_options(options)
 # Initialize OpenCV video capture
 desired_fps = 30
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(camera_index)
 cap.set(cv2.CAP_PROP_FPS, desired_fps)
 
 start_time = None
@@ -724,11 +736,11 @@ def main_loop():
         )
 
         # Copy shared references while holding the lock.
-        # with frame_lock:
-        #     display_frame = (
-        #         latest_frame.copy()
-        #         if latest_frame is not None else None
-        #     )
+        with frame_lock:
+            display_frame = (
+                latest_frame.copy()
+                if latest_frame is not None else None
+            )
 
         #     left_patch = (
         #         latest_left_eye_patch.copy()
@@ -740,8 +752,8 @@ def main_loop():
         #         if latest_right_eye_patch is not None else None
         #     )
 
-        # if display_frame is not None:
-        #     cv2.imshow("Webcam - BGR", display_frame)
+        if display_frame is not None:
+            cv2.imshow("Webcam - BGR", display_frame)
 
         # if left_patch is not None and left_patch.size > 0:
         #     # Patches are RGB; convert back for OpenCV display.

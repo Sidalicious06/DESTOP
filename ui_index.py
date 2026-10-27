@@ -401,6 +401,69 @@ class Ui_MainWindow(object):
 "\n"
 "\n"
 "")
+        self.widget1 = QWidget(self.ControlPanelPage)
+        self.widget1.setObjectName(u"widget1")
+        self.widget1.setGeometry(QRect(50, 409, 481, 71))
+        self.verticalLayout_7 = QVBoxLayout(self.widget1)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_3 = QLabel(self.widget1)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMinimumSize(QSize(0, 20))
+        self.label_3.setMaximumSize(QSize(16777215, 20))
+        self.label_3.setStyleSheet(u"QLabel {\n"
+"	\n"
+"	background-color: rgb(233, 239, 253);\n"
+"	\n"
+"	color: rgb(0, 0, 0);\n"
+"\n"
+"}\n"
+"\n"
+"\n"
+"")
+
+        self.horizontalLayout_4.addWidget(self.label_3)
+
+        self.CamerasComboBox = QComboBox(self.widget1)
+        self.CamerasComboBox.setObjectName(u"CamerasComboBox")
+        self.CamerasComboBox.setStyleSheet(u"QComboBox {\n"
+"	\n"
+"	background-color: rgb(233, 239, 253);\n"
+"	\n"
+"	color: black;\n"
+"\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"")
+
+        self.horizontalLayout_4.addWidget(self.CamerasComboBox)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_4)
+
+        self.CameraConfirm = QPushButton(self.widget1)
+        self.CameraConfirm.setObjectName(u"CameraConfirm")
+        self.CameraConfirm.setMinimumSize(QSize(0, 20))
+        self.CameraConfirm.setMaximumSize(QSize(16777215, 29))
+        self.CameraConfirm.setStyleSheet(u"QPushButton {\n"
+"	\n"
+"	background-color: rgb(233, 239, 253);\n"
+"	\n"
+"	color: rgb(0, 0, 0);\n"
+"\n"
+"}\n"
+"\n"
+"\n"
+"")
+
+        self.verticalLayout_7.addWidget(self.CameraConfirm)
+
         self.stackedWidget.addWidget(self.ControlPanelPage)
         self.ModulationPage = QWidget()
         self.ModulationPage.setObjectName(u"ModulationPage")
@@ -720,7 +783,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -746,12 +809,17 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Click this button to turn on DESTOP.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Remember to select your camera before you turn on DESTOP.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; ma"
+                        "rgin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">DESTOP will dynamically change to help you blink more.</span></p></body></html>", None))
         self.StatusIndicator.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600;\">STATUS: Starting up / Loading...</span></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Select Camera", None))
+        self.CameraConfirm.setText(QCoreApplication.translate("MainWindow", u"Confirm Camera Choice", None))
         self.ModulationTitle.setText(QCoreApplication.translate("MainWindow", u"Modulation", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"COMING SOON", None))
         self.DashboardTitle.setText(QCoreApplication.translate("MainWindow", u"Dashboard", None))
